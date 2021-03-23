@@ -28,13 +28,13 @@ public class MovieCatalogController {
     public List<CatalogItem> getCatalog(@PathVariable Integer userId){
         
         //get all rated movie ids
-        UserRating userRating = restTemplate.getForObject("http://localhost:8083/ratings/users/"+userId, UserRating.class);
+        UserRating userRating = restTemplate.getForObject("http://ratings-data-service/ratings/users/"+userId, UserRating.class);
 
         //for each movie id, call movie info service and get details
         return userRating.getRatings()
                 .stream()
                 .map(rating -> {
-                    Movie movie = this.restTemplate.getForObject("http://localhost:8082/movies/"+rating.getMovieId(), Movie.class);
+                    Movie movie = this.restTemplate.getForObject("http://movie-info-service/movies/"+rating.getMovieId(), Movie.class);
                     
                      //put them all together
                     return CatalogItem.builder()
